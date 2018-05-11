@@ -3,7 +3,6 @@ Massively Distributed Food Delivery Service Framework
 
 - Serverless Architecture via aws-serverless / aws-serverless-express and STDLIB
 - SMS oriented operation via twilio.com's networks
-- Custom Metrics via PM2
 - Aimed at bare-bone linux (linode etc.)
 - If it is not in ```npm run``` it does not exist (this is the starting point)
 
