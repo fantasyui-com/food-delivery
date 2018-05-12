@@ -1,7 +1,7 @@
 # food-delivery
 Massively Distributed Food Delivery Service Framework
 
-[!](screenshot.png)
+![](screenshot.png)
 
 - Serverless Architecture via aws-serverless / aws-serverless-express and STDLIB
 - SMS oriented operation via twilio.com's networks
