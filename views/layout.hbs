@@ -19,7 +19,7 @@
 
           console.log('Setup form...', this)
 
-          var $usernameControl = $('input.form-control.username', this);
+          var $usernameControl = $('.username', this);
           var $messagesControl = $('.messages', this);
           var $commandControl = $('input.form-control.command', this);
 
@@ -27,18 +27,18 @@
             socket.on('messages', function(data) {
               console.log('Browser got data from socket io server', data)
 
-              if ( data.username === '*' ){
+              if ( data.to === '*' ){
                 $messagesControl.append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <strong>Server:</strong> ${data.text}
+                  <strong>${data.from}:</strong> ${data.text}
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>`);
               }
 
-              if ( data.username === $usernameControl.val() ) {
+              if ( data.to === $usernameControl.text() ) {
                 $messagesControl.append(`<div class="alert alert-info alert-dismissible fade show" role="alert">
-                  <strong>${data.username}</strong> ${data.text}
+                  <strong>${data.from}:</strong> ${data.text}
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -47,23 +47,36 @@
             });
 
             $(this).submit(function(e){
+              e.preventDefault();
 
               var command = $commandControl.val();
 
               console.log('Got command: %s', command)
 
+              if(command.match(/^clear$/)){
+                $messagesControl.enpty();
+                return false;
+              }
+
               if(command.match(/^login /)){
                 var splited = $commandControl.val().split(" ")
                 var username = splited[1];
-                $usernameControl.val(username);
+                $usernameControl.text(username);
                 $commandControl.val('');
                 return false;
               }
 
-              socket.emit('command', {username: $usernameControl.val(), command:command});
-              $commandControl.val('');
+              if(command.match(/^@/)){
+                var splited = $commandControl.val().split(" ", 1)
+                var to = splited[0].replace(/^@/,'');
+                var data = $commandControl.val().replace(new RegExp('^@'+to.replace(/\*/,'\\*')+' '), '').trim();
 
-              e.preventDefault();
+                socket.emit('command', {from: $usernameControl.text(), to:to, command:data});
+                $commandControl.val('');
+                return false;
+              }
+
+              socket.emit('command', {from: $usernameControl.text(), command:command});
               return false;
 
             }); // submit

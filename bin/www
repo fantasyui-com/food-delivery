@@ -32,10 +32,21 @@ io.on('connection', function(socket){
 
   console.log('a user connected');
 
-  socket.on('command', function({username, command}){
-    console.log('got a command: ' + command);
+  socket.on('command', function({from, to, command}){
 
-    socket.emit('messages', {username: (username||'*'), text:'Hola!'})
+    if(!from) from='Anonymous';
+    if(!to) to='*';
+
+    if(to === '*'){
+      // send message to all
+      socket.emit('messages', {from,to,text:command})
+    } else if(to){
+      // to specific user
+      socket.emit('messages', {from,to,text:command})
+    }else{
+      // reply to sender
+      socket.emit('messages', {from, to:from, text:'Hola!'})
+    }
 
   });
 
