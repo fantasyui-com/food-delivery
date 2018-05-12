@@ -8,6 +8,8 @@ var app = require('../app');
 var debug = require('debug')('food-delivery:server');
 var http = require('http');
 
+
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,6 +22,28 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * socket.io
+ */
+
+var io = require('socket.io')(server);
+io.on('connection', function(socket){
+
+  console.log('a user connected');
+
+  socket.on('command', function({username, command}){
+    console.log('got a command: ' + command);
+
+    socket.emit('messages', {username: (username||'*'), text:'Hola!'})
+
+  });
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+
+});
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -2,6 +2,78 @@
 <html>
   <head>
     <title>{{title}}</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      $(function () {
+
+        var socket = io();
+
+        $('form.smartphone-form').each(function(){
+
+          console.log('Setup form...', this)
+
+          var $usernameControl = $('input.form-control.username', this);
+          var $messagesControl = $('.messages', this);
+          var $commandControl = $('input.form-control.command', this);
+
+
+            socket.on('messages', function(data) {
+              console.log('Browser got data from socket io server', data)
+
+              if ( data.username === '*' ){
+                $messagesControl.append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>Server:</strong> ${data.text}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>`);
+              }
+
+              if ( data.username === $usernameControl.val() ) {
+                $messagesControl.append(`<div class="alert alert-info alert-dismissible fade show" role="alert">
+                  <strong>${data.username}</strong> ${data.text}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>`);              }
+
+            });
+
+            $(this).submit(function(e){
+
+              var command = $commandControl.val();
+
+              console.log('Got command: %s', command)
+
+              if(command.match(/^login /)){
+                var splited = $commandControl.val().split(" ")
+                var username = splited[1];
+                $usernameControl.val(username);
+                $commandControl.val('');
+                return false;
+              }
+
+              socket.emit('command', {username: $usernameControl.val(), command:command});
+              $commandControl.val('');
+
+              e.preventDefault();
+              return false;
+
+            }); // submit
+
+        }); // each form
+
+      }); // jq
+    </script>
+
+
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>

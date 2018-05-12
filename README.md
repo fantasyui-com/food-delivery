@@ -1,6 +1,8 @@
 # food-delivery
 Massively Distributed Food Delivery Service Framework
 
+Note: 
+
 - Serverless Architecture via aws-serverless / aws-serverless-express and STDLIB
 - SMS oriented operation via twilio.com's networks
 - Aimed at bare-bone linux (linode etc.)
@@ -15,4 +17,5 @@ It aims to become fully functional but aims to test Massive Multiplayer Enterpri
 
 ## Usage
 
-- _USE NPM COMMANDS_ run ```npm run``` to see what is possible.
+- All functionality is expressed via npm commands
+- Execute ```npm run``` to see all system functions
