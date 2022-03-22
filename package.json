@@ -13,7 +13,7 @@
     "hbs": "^4.1.0",
     "http-errors": "~1.7.3",
     "morgan": "~1.9.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^4.4.1"
   },
   "description": "Massively Distributed Food Delivery Service Framework",
   "main": "app.js",
