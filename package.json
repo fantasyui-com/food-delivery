@@ -1,6 +1,6 @@
 {
   "name": "food-delivery",
-  "version": "1.32.0",
+  "version": "1.33.0",
   "scripts": {
     "dev": "DEBUG=food-delivery:* npm start",
     "start": "node ./bin/www",
