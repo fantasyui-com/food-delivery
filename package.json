@@ -12,7 +12,7 @@
     "express": "^4.19.2",
     "hbs": "^4.1.0",
     "http-errors": "~1.7.3",
-    "morgan": "~1.9.1",
+    "morgan": "^1.10.1",
     "socket.io": "^4.4.1"
   },
   "description": "Massively Distributed Food Delivery Service Framework",
